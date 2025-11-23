@@ -13,6 +13,10 @@ function App() {
       setShowCreateUser(true);
   }
 
+  const closeUserModalHandler = () => {
+    setShowCreateUser(false);
+  }
+
   return (
     <div>
       <Header />
@@ -28,7 +32,7 @@ function App() {
 
         </section>
 
-        {showCreateUser && <CreateUserModal />}
+        {showCreateUser && <CreateUserModal onClose={closeUserModalHandler} />}
       </main>
 
       <Footer />
