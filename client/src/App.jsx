@@ -17,6 +17,16 @@ function App() {
     setShowCreateUser(false);
   }
 
+  const addUserSubmitHandler = (event) => {
+    event.prventdefault();
+
+    const formData = new FormData(event.target);
+
+    const userData = Object.fromEntries(formData);
+
+    console.log(userData);
+  }
+
   return (
     <div>
       <Header />
@@ -32,7 +42,11 @@ function App() {
 
         </section>
 
-        {showCreateUser && <CreateUserModal onClose={closeUserModalHandler} />}
+        {showCreateUser && 
+          <CreateUserModal 
+            onClose={closeUserModalHandler} 
+            onSubmit={addUserSubmitHandler}
+        />}
       </main>
 
       <Footer />

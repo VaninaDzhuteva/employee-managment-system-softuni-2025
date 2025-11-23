@@ -1,5 +1,6 @@
 export default function CreateUserModal({
-    onClose
+    onClose,
+    onSubmit
 }) {
     return (
         <div class="overlay">
@@ -17,7 +18,7 @@ export default function CreateUserModal({
                             </svg>
                         </button>
                     </header>
-                    <form>
+                    <form onSubmit={onSubmit}>
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="firstName">First name</label>
