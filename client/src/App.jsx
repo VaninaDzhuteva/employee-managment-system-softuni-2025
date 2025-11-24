@@ -7,9 +7,9 @@ import Pagination from './components/Pagination.jsx'
 import CreateUserModal from './components/CreateUserModal.jsx'
 
 function App() {
-  const [users, setUsers] = useState([])
-    
+  const [users, setUsers] = useState([]);
   const [showCreateUser, setShowCreateUser] = useState(false);
+  const [forceRefresh, setForceRefresh] = useState(true);
 
   useEffect(() => {
         fetch('http://localhost:3030/jsonstore/users')
@@ -18,7 +18,7 @@ function App() {
                 setUsers(Object.values(result));
             })
             .catch((err) => alert(err.message));
-    }, []);
+    }, [forceRefresh]);
 
   const addUserClickHandler = () => {
       setShowCreateUser(true);
@@ -29,7 +29,8 @@ function App() {
   }
 
   const addUserSubmitHandler = (event) => {
-    event.prventdefault();
+    
+    event.preventDefault();
 
     const formData = new FormData(event.target);
 
@@ -51,10 +52,14 @@ function App() {
       },
       body: JSON.stringify(userData)
     })
-      .then(response => response.json())
-      .then(result => {
-        console.log(result);
-      });
+      .then(() => {
+        closeUserModalHandler();
+        setForceRefresh(state => !state)
+      })
+      .catch(err => alert(err.message));
+
+      console.log(userData);
+      
   }
 
   return (
@@ -77,7 +82,7 @@ function App() {
             onClose={closeUserModalHandler} 
             onSubmit={addUserSubmitHandler}
         />}
-      </main>
+      </main>Ч
 
       <Footer />
     </div>
