@@ -1,10 +1,12 @@
 import { useState } from "react";
 import UserDetails from "./UserDetails.jsx";
 import UserItem from "./UserItem.jsx";
+import UserDeleteModal from "./UserDeletemodal.jsx";
 
-export default function UserList({users}) {
+export default function UserList({users, forceUserRefresh}) {
 
-    const [showUserDetails, setShowUserDetails] = useState(null);
+    const [showUserDetails, setShowUserDetails] = useState(false);
+    const [showUserDelete, setShowUserDelete] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     const detailsActionClick = (userId) => {
@@ -12,8 +14,15 @@ export default function UserList({users}) {
         setSelectedUserId(userId);
     }
 
+    const deleteActionClickHandler = (userId) => {
+        setSelectedUserId(userId);
+        setShowUserDelete(true);
+    }
+
     const closeModalHandler = () => {
         setShowUserDetails(false);
+        setShowUserDelete(false);
+        setSelectedUserId(null);
     }
 
     return (
@@ -117,7 +126,13 @@ export default function UserList({users}) {
                 </thead>
                 <tbody>
                     {
-                        users.map(user => <UserItem key={user._id} {...user} onDetailsClick={detailsActionClick} />)
+                        users.map(user => 
+                            <UserItem 
+                                key={user._id} 
+                                {...user} 
+                                onDetailsClick={detailsActionClick} 
+                                onDeleteClick={deleteActionClickHandler}
+                            />)
                     }
                     
                 </tbody>
@@ -129,6 +144,16 @@ export default function UserList({users}) {
                     onClose={closeModalHandler}
                 />
             )}  
+
+            {
+                showUserDelete && (
+                    <UserDeleteModal
+                        userId={selectedUserId}
+                        onClose={closeModalHandler}
+                        forceUserRefresh={forceUserRefresh}
+                    />
+                )
+            }
         </div>
     )
 }
