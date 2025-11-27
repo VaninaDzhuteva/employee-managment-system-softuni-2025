@@ -1,12 +1,14 @@
 import { useState } from "react";
 import UserDetails from "./UserDetails.jsx";
 import UserItem from "./UserItem.jsx";
-import UserDeleteModal from "./UserDeletemodal.jsx";
+import UserDeleteModal from "./UserDeleteModal.jsx";
+import UserSaveModal from "./UserSaveModal.jsx";
 
 export default function UserList({users, forceUserRefresh}) {
 
     const [showUserDetails, setShowUserDetails] = useState(false);
-    const [showUserDelete, setShowUserDelete] = useState(false)
+    const [showUserDelete, setShowUserDelete] = useState(false);
+    const [showUserEdit, setShowUserEdit] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState(null);
 
     const detailsActionClick = (userId) => {
@@ -19,10 +21,17 @@ export default function UserList({users, forceUserRefresh}) {
         setShowUserDelete(true);
     }
 
+    const editActionClickHandler = (userId) => {
+        setSelectedUserId(userId);
+        setShowUserEdit(true);
+    }
+
     const closeModalHandler = () => {
         setShowUserDetails(false);
         setShowUserDelete(false);
+        setShowUserEdit(false);
         setSelectedUserId(null);
+        forceUserRefresh()
     }
 
     return (
@@ -132,6 +141,7 @@ export default function UserList({users, forceUserRefresh}) {
                                 {...user} 
                                 onDetailsClick={detailsActionClick} 
                                 onDeleteClick={deleteActionClickHandler}
+                                onEditClick={editActionClickHandler}
                             />)
                     }
                     
@@ -150,7 +160,16 @@ export default function UserList({users, forceUserRefresh}) {
                     <UserDeleteModal
                         userId={selectedUserId}
                         onClose={closeModalHandler}
-                        forceUserRefresh={forceUserRefresh}
+                    />
+                )
+            }
+
+            {
+                showUserEdit && (
+                    <UserSaveModal 
+                        userId={selectedUserId}
+                        onClose={closeModalHandler}
+                        editMode
                     />
                 )
             }

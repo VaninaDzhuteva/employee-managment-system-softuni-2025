@@ -4,16 +4,12 @@ import Footer from './components/Footer.jsx'
 import Search from './components/Search.jsx'
 import UserList from './components/UserList.jsx'
 import Pagination from './components/Pagination.jsx'
-import CreateUserModal from './components/CreateUserModal.jsx'
+import UserSaveModal from './components/UserSaveModal.jsx'
 
 function App() {
   const [users, setUsers] = useState([]);
   const [showCreateUser, setShowCreateUser] = useState(false);
   const [refresh, setRefresh] = useState(true);
-
-  const forceUserRefresh = () => {
-    setRefresh(state => !state);
-  }
 
   useEffect(() => {
         fetch('http://localhost:3030/jsonstore/users')
@@ -23,6 +19,10 @@ function App() {
             })
             .catch((err) => alert(err.message));
     }, [refresh]);
+
+    const forceUserRefresh = () => {
+    setRefresh(state => !state);
+  }
 
   const addUserClickHandler = () => {
       setShowCreateUser(true);
@@ -61,8 +61,6 @@ function App() {
         forceUserRefresh();
       })
       .catch(err => alert(err.message));
-
-      console.log(userData);
       
   }
 
@@ -82,7 +80,7 @@ function App() {
         </section>
 
         {showCreateUser && 
-          <CreateUserModal 
+          <UserSaveModal 
             onClose={closeUserModalHandler} 
             onSubmit={addUserSubmitHandler}
         />}
